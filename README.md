@@ -1,2 +1,2 @@
 # music-app-api
-Music app API source code
+Music app graphql API source code
