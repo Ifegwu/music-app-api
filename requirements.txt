@@ -1,0 +1,5 @@
+Django>=2.2.1,<2.3.0
+
+graphene-django>=2.0,<2.8.4
+django-graphql-jwt>=0.3.0,<0.4
+django-cors-headers>=3.2.1,<3.3
