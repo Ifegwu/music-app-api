@@ -6,6 +6,7 @@ class Track(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     url = models.URLField()
+    avarta = models.URLField(blank=True, default='DEFAULT VALUE')
     created_at = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(
         get_user_model(),

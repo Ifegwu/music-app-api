@@ -18,21 +18,42 @@ class LikeType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    tracks = graphene.List(TrackType, search=graphene.String())
+    tracks = graphene.List(
+                            TrackType,
+                            search=graphene.String(),
+                            first=graphene.Int(),
+                            skip=graphene.Int(),
+                        )
     likes = graphene.List(LikeType)
 
-    def resolve_tracks(self, info, search=None):
+    def resolve_tracks(
+                        self,
+                        info,
+                        search=None,
+                        first=None,
+                        skip=None,
+                        **kwargs
+                    ):
+        qs = Track.objects.all()
+
         if search:
             filter = (
                 Q(title__icontains=search) |
                 Q(description__icontains=search) |
                 Q(url__icontains=search) |
+                Q(avarta__icontains=search) |
                 Q(posted_by__username__icontains=search)
 
             )
-            return Track.objects.filter(filter)
+            qs.filter(filter)
 
-        return Track.objects.all()
+        if skip:
+            qs = qs[skip:]
+
+        if first:
+            qs = qs[:first]
+
+        return qs
 
     def resolve_likes(self, info):
         return Like.objects.all()
@@ -45,8 +66,9 @@ class CreateTrack(graphene.Mutation):
         title = graphene.String()
         description = graphene.String()
         url = graphene.String()
+        avarta = graphene.String()
 
-    def mutate(self, info, title, description, url):
+    def mutate(self, info, title, description, url, avarta):
         user = info.context.user
 
         if user.is_anonymous:
@@ -56,6 +78,7 @@ class CreateTrack(graphene.Mutation):
             title=title,
             description=description,
             url=url,
+            avarta=avarta,
             posted_by=user)
         track.save()
         return CreateTrack(track=track)
@@ -69,8 +92,9 @@ class UpdateTrack(graphene.Mutation):
         title = graphene.String()
         description = graphene.String()
         url = graphene.String()
+        avarta = graphene.String()
 
-    def mutate(self, info, track_id, title, url, description):
+    def mutate(self, info, track_id, title, url, avarta, description):
         user = info.context.user
         track = Track.objects.get(id=track_id)
 
@@ -80,6 +104,7 @@ class UpdateTrack(graphene.Mutation):
         track.title = title
         track.description = description
         track.url = url
+        track.avarta = avarta
 
         track.save()
 
