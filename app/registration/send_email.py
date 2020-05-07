@@ -1,7 +1,7 @@
 import jwt
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from django.shortcuts import response
+# from django.shortcuts import response
 from django.template.loader import render_to_string
 import os
 # from app.settings import DOMAIN, SENDGRID_API_KEY

@@ -5,10 +5,7 @@ from django.core import mail
 
 class AuthTestCase(TestCase):
 
-    def query(
-        self,
-        query: str = None
-    ):
+    def query(self, query: str = None):
         # Method to run all queries and mutations for tests.
         body = dict()
         body['query'] = query
@@ -18,56 +15,30 @@ class AuthTestCase(TestCase):
         json_response = json.loads(response.content.decode())
         return json_response
 
-    # def test_user_can_register_for_account(self):
-    #     register_user_query = '''
-    #     mutation {{
-    #       createUser(
-    #         username:"{username}",
-    #         email: "{email}",
-    #         password: "{password}",
-    #       )
-    #       }}
-    #     }}
-    #     '''
-    #     response = self.query(register_user_query.format(
-    #         username="testuser",
-    #         email="user@testuser.com",
-    #         password="password123"
-    #     ))
-    #     data = response.get('data')
-    #     self.assertEqual(
-    #       data["createUser"],
-    #       "Successfully created user, testuser"
-    #     )
-
     def test_user_can_register_for_account(self):
-        response = self.query(
-            '''
-            mutation registerUserMutation(
-              $username: String!,
-              $email: String!,
-              $password: String!) {
-                createUser(
-                  username: $username,
-                  email: $email,
-                  password: $password) {
-                  user {
-                    username
-                    email
-                    password
-                  }
-                }
-              }
-            ''',
-            op_name='registerUserMutation',
-            input_data={
-              'username': 'test',
-              'email': 'test@temunah.app',
-              'password': 'password123'}
-        )
+        register_user_query = '''
+        mutation {{
+          createUser(
+            username:"{username}",
+            email: "{email}",
+            password: "{password}") {{
+            user {{
+              email,
+              username,
+              password
+            }}
+          }}
+        }}
 
-        # This validates the status code and if you get errors
-        self.assertResponseNoErrors(response)
+        '''
+        response = self.query(register_user_query.format(
+            username="testuser",
+            email="user@testuser.com",
+            password="password123"
+        ))
+        data = response.get('data')
+        self.assertEqual(data["createUser"],
+                         "Successfully created user, testuser")
 
     def test_send_email(self):
         mail.send_mail(
