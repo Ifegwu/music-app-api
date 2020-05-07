@@ -1,5 +1,5 @@
 import jwt
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
 from registration.models import User
 from app.settings import SECRET_KEY, DOMAIN
@@ -12,7 +12,7 @@ def activate_account(request, token):
         user.is_verified = True
         user.save()
         return redirect(DOMAIN)
-    # else:
-    #     user.is_verified = False
-    #     messages.success(request, ('Items has been added to list'));
-    #     return redirect(f'{DOMAIN}/api')
+    else:
+        user.is_verified = False
+        # messages.success(request, ('Items has been added to list'))
+        return redirect(f'{DOMAIN}/api')

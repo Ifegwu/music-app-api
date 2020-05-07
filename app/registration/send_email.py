@@ -1,9 +1,12 @@
 import jwt
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from django.shortcuts import response
 from django.template.loader import render_to_string
 import os
-from app.settings import SECRET_KEY, DOMAIN, SENDGRID_API_KEY
+# from app.settings import DOMAIN, SENDGRID_API_KEY
+from app.settings import DOMAIN
+
 
 def send_confirmation(email, username):
     token = jwt.encode({'user': username}, os.environ.get('SENDGRID_API_KEY'),

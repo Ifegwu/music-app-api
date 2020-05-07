@@ -1,9 +1,7 @@
 from django.contrib.auth import get_user_model
-
 import graphene
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
-from graphql_relay.node.node import from_global_id #for updating user
 
 
 class UserType(DjangoObjectType):
@@ -48,9 +46,9 @@ class CreateUser(graphene.Mutation):
 
 class UserInput(graphene.InputObjectType):
     id = graphene.Int(required=False)
-    username   = graphene.String(required=False)
-    password   = graphene.String(required=False)
-    email      = graphene.String(required=False)
+    username = graphene.String(required=False)
+    password = graphene.String(required=False)
+    email = graphene.String(required=False)
 
 
 class UpdateUser(graphene.Mutation):
@@ -62,7 +60,7 @@ class UpdateUser(graphene.Mutation):
     # @login_required
     def mutate(self, info, user_data=None):
         user = info.context.user
-        
+
         for k, v in user_data.items():
             if (k == 'password') and (v is not None):
                 user.set_password(user_data.password)
@@ -74,29 +72,10 @@ class UpdateUser(graphene.Mutation):
             user.save()
             return UpdateUser(user=user)
 
-        except ValidationError as e:
+        except Exception as e:
             return UpdateUser(user=user, errors=e)
 
-# class deleteUser(graphene.Mutation):
-#         user = graphene.Field(UserType)
-
-#         class Arguments:
-#             # id = graphene.Int(required=False)
-#             username   = graphene.String(required=True)
-        
-#         def mutate(self, info, user_data=None):
-#             context = {}
-#             try:
-#                 user = info.context.user
-#                 user.is_active = False
-#                 user.delete()
-#                 context['msg'] = 'The user is deleted.'       
-#             except user.DoesNotExist: 
-#                 context['msg'] = 'User does not exist.'
-#             except Exception as e: 
-#                 context['msg'] = e.message
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     update_user = UpdateUser.Field()
-    # delete_user = deleteUser.Field()

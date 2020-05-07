@@ -28,6 +28,7 @@ class Query(graphene.ObjectType):
 
         return user
 
+
 class CreateUser(graphene.Mutation):
     message = graphene.String()
     user = graphene.Field(UserType)
@@ -44,8 +45,13 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
-        send_confirmation(email=user.email, username=user.username)
-        return CreateUser(user=user, message="Successfully created user, {}".format(user.username))
+        send_confirmation(
+            mail=user.email,
+            username=user.username
+        )
+        return CreateUser(
+                user=user,
+                message="Successfully created user, {}".format(user.username))
 
 
 class LoginUser(graphene.Mutation):
@@ -70,14 +76,16 @@ class LoginUser(graphene.Mutation):
                 payload = jwt_payload(user)
                 token = jwt_encode(payload)
                 return LoginUser(token=token, message=success_message)
+
             return LoginUser(message=verification_error)
         return LoginUser(message=error_message)
 
+
 class UserInput(graphene.InputObjectType):
     id = graphene.Int(required=False)
-    username   = graphene.String(required=False)
-    password   = graphene.String(required=False)
-    email      = graphene.String(required=False)
+    username = graphene.String(required=False)
+    password = graphene.String(required=False)
+    email = graphene.String(required=False)
 
 
 class UpdateUser(graphene.Mutation):
@@ -89,7 +97,7 @@ class UpdateUser(graphene.Mutation):
     # @login_required
     def mutate(self, info, user_data=None):
         user = info.context.user
-        
+
         for k, v in user_data.items():
             if (k == 'password') and (v is not None):
                 user.set_password(user_data.password)
@@ -101,30 +109,11 @@ class UpdateUser(graphene.Mutation):
             user.save()
             return UpdateUser(user=user)
 
-        except ValidationError as e:
+        except Exception as e:
             return UpdateUser(user=user, errors=e)
 
-# class deleteUser(graphene.Mutation):
-#         user = graphene.Field(UserType)
-
-#         class Arguments:
-#             # id = graphene.Int(required=False)
-#             username   = graphene.String(required=True)
-        
-#         def mutate(self, info, user_data=None):
-#             context = {}
-#             try:
-#                 user = info.context.user
-#                 user.is_active = False
-#                 user.delete()
-#                 context['msg'] = 'The user is deleted.'       
-#             except user.DoesNotExist: 
-#                 context['msg'] = 'User does not exist.'
-#             except Exception as e: 
-#                 context['msg'] = e.message
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     update_user = UpdateUser.Field()
-    # delete_user = deleteUser.Field()
