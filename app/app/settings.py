@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
-print(SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -132,9 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # sendgrid settings
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-print(SENDGRID_API_KEY)
 EMAIL_HOST = os.getenv('EMAIL_HOST')
-print(EMAIL_HOST)
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = os.getenv('EMAIL_PORT')
