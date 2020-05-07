@@ -20,10 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&$(76t+n%7f@_inyl3n4i^^49ad2h)&6!alv06lu6tpuzedh+6'
+SECRET_KEY = os.getenv('SECRET_KEY')
+print(SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'tracks',
+    'registration'
 ]
 
 GRAPHENE = {
@@ -107,6 +110,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'registration.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -126,6 +130,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# sendgrid settings
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+print(SENDGRID_API_KEY)
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+print(EMAIL_HOST)
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+DOMAIN = os.getenv("DOMAIN")
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -145,3 +159,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = 'static/'

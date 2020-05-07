@@ -1,15 +1,22 @@
 import graphene
 import tracks.schema
-import users.schema
+# import users.schema
+import registration.schema
 import graphql_jwt
 
 
-class Query(users.schema.Query, tracks.schema.Query, graphene.ObjectType):
+class Query(
+        # users.schema.Query, 
+        registration.schema.Query,
+        tracks.schema.Query, 
+        graphene.ObjectType
+    ):
     pass
 
 
 class Mutation(
-                users.schema.Mutation,
+                # users.schema.Mutation,
+                registration.schema.Mutation,
                 tracks.schema.Mutation,
                 graphene.ObjectType
             ):
