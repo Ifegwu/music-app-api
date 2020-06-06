@@ -11,7 +11,7 @@
 
 aniso8601==7.0.0
 autopep8==1.4.4
-Django==2.2.10
+Django==2.2.13
 django-graphql-jwt==0.2.2
 graphene==2.1.8
 graphene-django==2.6.0
