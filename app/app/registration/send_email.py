@@ -11,6 +11,7 @@ from app.settings import DOMAIN
 def send_confirmation(email, username):
     token = jwt.encode({'user': username}, os.environ.get('SENDGRID_API_KEY'),
                        algorithm='HS256').decode('utf-8')
+    print(os.environ.get('SENDGRID_API_KEY'))
     context = {
         'small_text_detail': 'Thank you for '
                              'creating an account. '

@@ -18,15 +18,11 @@ class AuthTestCase(TestCase):
     def test_user_can_register_for_account(self):
         register_user_query = '''
         mutation {{
-          createUser(
-            username:"{username}",
-            email: "{email}",
-            password: "{password}") {{
+          createUser(username:"{username}", email: "{email}", password: "{password}") {{
             user {{
-              email,
-              username,
-              password
+              email
             }}
+            message
           }}
         }}
 
@@ -37,8 +33,7 @@ class AuthTestCase(TestCase):
             password="password123"
         ))
         data = response.get('data')
-        self.assertEqual(data["createUser"],
-                         "Successfully created user, testuser")
+        self.assertEqual(data["createUser"]["message"], "Successfully created user, testuser")
 
     def test_send_email(self):
         mail.send_mail(

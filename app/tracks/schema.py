@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from .models import Track, Like
 # from users.schema import UserType
-from registration.schema import UserType
+from app.registration.schema import UserType
 
 
 class TrackType(DjangoObjectType):

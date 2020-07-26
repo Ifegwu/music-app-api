@@ -1,7 +1,7 @@
 import jwt
 from django.shortcuts import redirect
 
-from registration.models import User
+from app.registration.models import User
 from app.settings import SECRET_KEY, DOMAIN
 
 
