@@ -9,18 +9,20 @@ PROJECT_BASE_PATH='/usr/local/apps/music-app-api'
 
 echo "Installing dependencies..."
 apt-get update
-apt-get install -y python3-dev python3-venv postgresql python-pip supervisor nginx git
+apt-get install -y python3-dev postgresql python-pip supervisor nginx git
 
 # Create project directory
 mkdir -p $PROJECT_BASE_PATH
 git clone $PROJECT_GET_URL $PROJECT_BASE_PATH
-cd $PROJECT_BASE_PATH 
 
-# Build docker container
-$PROJECT_GET_URL docker-compose build
+# Install python packages
+$PROJECT_BASE_PATH/env/bin/pip install -r $PROJECT_BASE_PATH/requirements.txt
+cd $PROJECT_BASE_PATH
+$PROJECT_BASE_PATH/env/bin/ docker-compose run app pipenv install gunicorn==19.9.0
 
-# Run docker container
-$PROJECT_GET_URL docker-compose up
+# Run migration and collect static file
+# $PROJECT_BASE_PATH/env/bin/ docker-compose run app sh -c "python manage.py migrate"
+# $PROJECT_BASE_PATH/env/bin/ docker-compose run app sh -c "python manage.py collectstatic --no-input"
 
 # Configure supervisor
 cp $PROJECT_GET_URL/deploy/supervisor_music_api.conf /etc/supervisor/conf.d/music_api.conf

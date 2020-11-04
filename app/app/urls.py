@@ -18,9 +18,13 @@ from django.urls import path
 from graphene_django.views import GraphQLView
 from django.views.decorators.csrf import csrf_exempt
 from app.registration.views import activate_account
+from app.registration.thanks import thanks
+from app.registration.tryagain import tryagain
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/activate/<token>', activate_account, name='activate'),
-    path('api/', csrf_exempt(GraphQLView.as_view(graphiql=True)))
+    path('api/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('api/thanks/', thanks, name='thanks'),
+    path('api/tryagain/', tryagain, name='oops!')
 ]

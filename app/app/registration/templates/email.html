@@ -29,7 +29,7 @@
         <div class="card-body">
             <p class="card-text text-center"><strong>{{ small_text_detail }}</strong></p>
             <p class="text-center">{{ email }}</p>
-            <a class="text-center verify-button" href=" {{ domain }}{% url "activate"  token=token %}">
+            <a class="text-center verify-button" href="{{domain}}{% url "activate" token=token %}">
                 <button type="button" class="btn">Verify Account</button>
             </a>
         </div>

@@ -26,7 +26,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # DEBUG = True
 DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'temunah.online', 
+    'localhost', 
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -65,6 +69,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
+    'http://temunah.online',
     'http://localhost:4000',
     'http://localhost:8001',
     'http://localhost:8000',
@@ -80,7 +85,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,13 +136,16 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # sendgrid settings
+
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+FRONTEND_DOMAIN = '127.0.0.1:4000'
+DOMAIN = os.getenv("DOMAIN")
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-DOMAIN = os.getenv("DOMAIN")
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -159,3 +167,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = 'static/'
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+# SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SESSION_COOKIE_SECURE = True # new
+CSRF_COOKIE_SECURE = True # new
