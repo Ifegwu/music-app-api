@@ -2,11 +2,17 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BasUserAdmin
 from django.utils.translation import gettext as _
 
-from app.registration import models
+from .models import User, Subscriptions
+
+class SubscriptionsInline(admin.StackedInline):
+    model = Subscriptions
+    max_num = 1
+    can_delete = False
 
 class UserAdmin(BasUserAdmin):
     ordering = ['id']
     list_display = ['email', 'username']
+    inlines = [SubscriptionsInline]
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal Info'), {'fields': ('username',)}),
@@ -28,4 +34,6 @@ class UserAdmin(BasUserAdmin):
         }),
     )
 
-admin.site.register(models.User, UserAdmin)
+
+admin.site.register(User, UserAdmin)
+admin.site.register(Subscriptions)

@@ -32,3 +32,4 @@ singledispatch==3.4.0.3
 six==1.12.0
 sqlparse==0.3.0
 gunicorn==19.9.0
+stripe>=2.48.0,<3.0
