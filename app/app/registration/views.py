@@ -2,6 +2,7 @@ import jwt
 from django.shortcuts import redirect, render
 from app.registration.thanks import thanks
 from app.registration.models import User
+# from django.contrib.auth.models import User
 from app.settings import SECRET_KEY, DOMAIN, FRONTEND_DOMAIN, STRIPE_SECRET_KEY
 from django.template.loader import render_to_string
 from django.http import HttpResponse, JsonResponse
@@ -10,8 +11,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import stripe  
 from .models import Subscriptions
-
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 stripe.api_key = STRIPE_SECRET_KEY
@@ -80,7 +82,7 @@ def save_stripe_info(request):
         customer=customer, 
         payment_method=payment_method_id,  
         currency='ngn', # you can provide any currency you want
-        amount=500000,  # it equals 9.99 PLN
+        amount=500000,  # it equals 5000.00 NGN
         confirm=True
     )  
 
@@ -93,40 +95,27 @@ def save_stripe_info(request):
             {'price': 'price_1I6EAkJF4Y1CLG7ZZPtxzRfK'}, #here paste your price id
         ],
     )
-    # def post(self, request, *args, **kwargs):
-    # user = get_user_model()
-    permission_classes = (IsAuthenticated,)
-    print(User)
-    if permission_classes == True:
+
+    user = User.objects.get()
+    if user.is_verified:    
         subscriptions = Subscriptions.objects.create(
-            subscriber=User,
+            subscriber=user,
             music=music,
-            email=customer.email,
+            email=email,
             stripe_id=customer.id,
             fee=customer_intent.amount
         )
-        subscriptions.subscriber = User.id
-            # subscriptions.music = music
-            # subscriptions.email = customer.email
-            # subscriptions.stripe_id = customer.id
-            # subscriptions.fee = customer_intent.amount
-            # print(subscriptions)
+        subscriptions.subscriber = user.id
         subscriptions.save()
+        extra_msg = "You successfully created a subscription"
 
-        return Response(status=HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK, 
+            data={'message': 'Success', 'data': {
+            'customer': customer, 'extra_msg': extra_msg}
+        })
     else:
-        return Response(
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                data={"message": "Something went wrong", }
-        )
-
-
-    return Response(status=status.HTTP_400_BAD_REQUEST, data={"message": "Invalid data received"})
-
-    return Response(status=status.HTTP_200_OK, 
-        data={'message': 'Success', 'data': {
-        'customer_id': customer.id, 'extra_msg': extra_msg}
-    })
+        return Response(status=status.HTTP_400_BAD_REQUEST, 
+            data={'message': 'You are not authorized to perform this action'})
 
 @api_view(['POST'])
 def delete_subscription(request):

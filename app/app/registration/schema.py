@@ -146,14 +146,13 @@ class CreateSubscription(graphene.Mutation):
     # email = graphene.String(required=False)
     # music = graphene.String(required=False)
     # token = graphene.String(required=False)
-    # subscribed_by = graphene. String(required=False)
 
     class Arguments:
         fee = graphene.String(required=False)
         email=graphene.String(required=False)
         music = graphene.String(required=False)
         token = graphene.String(required=False)
-        subscribed_by = graphene. String(required=False)
+        subscriber = graphene. String(required=False)
 
     def mutate(self, info, **kwargs):
         user = info.context.user
@@ -161,7 +160,7 @@ class CreateSubscription(graphene.Mutation):
         email = kwargs.get('email')
         music = kwargs.get('music')
         token = kwargs.get('token')
-        subscribed_by = kwargs.get('subscribed_by')
+        subscriber = kwargs.get('subscriber')
 
         subscriber = user.objects.create(
             fee=kwargs.get('fee'),
