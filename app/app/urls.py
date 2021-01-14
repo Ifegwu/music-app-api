@@ -19,7 +19,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from graphene_django.views import GraphQLView
 from django.views.decorators.csrf import csrf_exempt
 from graphql_jwt.decorators import jwt_cookie
-from app.registration.views import activate_account, test_payment, save_stripe_info, confirm_payment_intent, delete_subscription 
+from app.registration.views import activate_account #, test_payment, save_stripe_info, confirm_payment_intent, delete_subscription 
 from app.registration.thanks import thanks
 from app.registration.tryagain import tryagain
 
@@ -29,10 +29,10 @@ urlpatterns = [
     path('graphql/', csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=True)))),
     path('api/thanks/', thanks, name='thanks'),
     path('api/tryagain/', tryagain, name='oops!'),
-    path('api/test-payment/', test_payment, name='testpayment'),
-    path('api/save-stripe-info/', save_stripe_info, name='stripeinfo'),
-    path('api/confirm-payment-intent/', confirm_payment_intent, name='paymentintent'),
-    path('api/delete-subscription/', delete_subscription, name='deletesubscription')
+    # path('api/test-payment/', test_payment, name='testpayment'),
+    # path('api/save-stripe-info/', save_stripe_info, name='stripeinfo'),
+    # path('api/confirm-payment-intent/', confirm_payment_intent, name='paymentintent'),
+    # path('api/delete-subscription/', delete_subscription, name='deletesubscription')
 ]
 
 urlpatterns += staticfiles_urlpatterns()

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'rest_framework',
+    'rest_framework.authtoken',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'tracks',
     'app.registration'

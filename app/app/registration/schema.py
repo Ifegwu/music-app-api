@@ -140,72 +140,120 @@ class UpdateUser(graphene.Mutation):
             return UpdateUser(user=user, errors=e)
 
 class CreateSubscription(graphene.Mutation):
-    user = graphene.Field(UserType)
-    message = graphene.String()
-    # charge = graphene.String(required=False)
-    # email = graphene.String(required=False)
-    # music = graphene.String(required=False)
-    # token = graphene.String(required=False)
+    subscriptions = graphene.Field(SubscriptionsType)
 
     class Arguments:
         fee = graphene.String(required=False)
         email=graphene.String(required=False)
         music = graphene.String(required=False)
-        token = graphene.String(required=False)
+        stripe_id  = graphene.String(required=False)
         subscriber = graphene. String(required=False)
+        payment_method_id = graphene.String(required=False)
 
     def mutate(self, info, **kwargs):
         user = info.context.user
         fee = kwargs.get('fee')
         email = kwargs.get('email')
         music = kwargs.get('music')
-        token = kwargs.get('token')
+        stripe_id  = kwargs.get('stripe_id ')
         subscriber = kwargs.get('subscriber')
-
-        subscriber = user.objects.create(
-            fee=kwargs.get('fee'),
-            email=kwargs.get('email'),
-            music=kwargs.get('music'),
-            token=kwargs.get('token')
-        )
-
-
-
+        payment_method_id = kwargs.get('payment_method_id')
+        
         stripe.api_key = settings.STRIPE_SECRET_KEY
-
+        
         if user.is_anonymous:
             raise GraphQLError('You need to login to add a subscription!')
+
+        # payment_method_id = data['payment_method_id']
+        # payment_method_id = stripeId
+
+        extra_msg = '' # add new variable to response message
+
+        # checking if customer with provided email already exists
+        customer_data = stripe.Customer.list(email=email).data 
+
+        # if the array is empty it means the email has not been used yet  
+        if len(customer_data) == 0:
+            # creating customer
+            customer = stripe.Customer.create(
+                email=email,
+                description=music,
+                payment_method=payment_method_id,
+                invoice_settings={
+                    'default_payment_method': payment_method_id
+                }
+            )
+        else:
+            customer = customer_data[0]
+            extra_msg = "Customer already existed."
+
+        # add these lines
+        customer_intent = stripe.PaymentIntent.create(
+            customer=customer, 
+            payment_method=payment_method_id,  
+            currency='ngn', # you can provide any currency you want
+            amount=500000,  # it equals 5000.00 NGN
+            confirm=True
+        ) 
+
+        customer_intent
+        customer_intent.amount
+
+        stripe.Subscription.create(
+            customer=customer,
+            items=[
+                {'price': 'price_1I6EAkJF4Y1CLG7ZZPtxzRfK'}, #here paste your price id
+            ],
+        ) 
+        
+        try:
+            subscriptions = Subscriptions(
+                email=email,
+                music=music,
+                stripe_id=customer.id,
+                fee=customer_intent.amount,
+                subscriber=user,
+            )
+            subscriptions.save()
+            print(subscriptions)
+        except User.DoesNotExist:
+            return HttpResponse({'Error': "Internal server error"}, status="500")
+        
+        # subscriber = user.objects.create(
+        #     fee=kwargs.get('fee'),
+        #     email=kwargs.get('email'),
+        #     music=kwargs.get('music'),
+        #     token=kwargs.get('token')
+        # )
+
 
         # Get the credit card details submitted by the form
         # stripeToken = request.POST('token')
         # Create a Customer
-        print(token)
-        print(email)
-        stripe_customer = stripe.Customer.create(
-            source=token,
-            description=email
-        )
+        # print(token)
+        # print(email)
+        # stripe_customer = stripe.Customer.create(
+        #     source=token,
+        #     description=email
+        # )
 
-        print(stripe_customer)
+        # print(stripe_customer)
 
 
 
         # Charge the Customer instead of the card
-        charge_amount = stripe.Charge.create(
-            amount=500000, # in kobo
-            currency="NGN",
-            customer=stripe_customer.id,
-            description="A Monthly music promotion on Temunah Music Platform",
-        )
+        # charge_amount = stripe.Charge.create(
+        #     amount=500000, # in kobo
+        #     currency="NGN",
+        #     customer=stripe_customer.id,
+        #     description="A Monthly music promotion on Temunah Music Platform",
+        # )
 
-        fee = charge_amount.amount
+        # fee = charge_amount.amount
         
-        subscriber.save()
+        # subscriber.save()
 
-        return CreateSubscription(
-            subscriber=subscriber,
-            message=message
-        )
+        return CreateSubscription(subscriptions=subscriptions)
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
