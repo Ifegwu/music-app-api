@@ -164,9 +164,6 @@ class CreateSubscription(graphene.Mutation):
         if user.is_anonymous:
             raise GraphQLError('You need to login to add a subscription!')
 
-        # payment_method_id = data['payment_method_id']
-        # payment_method_id = stripeId
-
         extra_msg = '' # add new variable to response message
 
         # checking if customer with provided email already exists
@@ -218,45 +215,44 @@ class CreateSubscription(graphene.Mutation):
             print(subscriptions)
         except User.DoesNotExist:
             return HttpResponse({'Error': "Internal server error"}, status="500")
-        
-        # subscriber = user.objects.create(
-        #     fee=kwargs.get('fee'),
-        #     email=kwargs.get('email'),
-        #     music=kwargs.get('music'),
-        #     token=kwargs.get('token')
-        # )
-
-
-        # Get the credit card details submitted by the form
-        # stripeToken = request.POST('token')
-        # Create a Customer
-        # print(token)
-        # print(email)
-        # stripe_customer = stripe.Customer.create(
-        #     source=token,
-        #     description=email
-        # )
-
-        # print(stripe_customer)
-
-
-
-        # Charge the Customer instead of the card
-        # charge_amount = stripe.Charge.create(
-        #     amount=500000, # in kobo
-        #     currency="NGN",
-        #     customer=stripe_customer.id,
-        #     description="A Monthly music promotion on Temunah Music Platform",
-        # )
-
-        # fee = charge_amount.amount
-        
-        # subscriber.save()
 
         return CreateSubscription(subscriptions=subscriptions)
+
+class CancelSubscription(graphene.Mutation):
+    subscriptions = graphene.Field(SubscriptionsType)
+
+    class Arguments:
+        email  = graphene.String(required=False)
+        stripe_id  = graphene.String(required=False)
+
+    def mutate(self, info, **kwargs):
+        user = info.context.user
+        email = kwargs.get('email')
+        stripe_id  = kwargs.get('stripe_id ')
+
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        subscriptions = Subscriptions.objects.get(email=email)
+        print(subscriptions.stripe_id)
+
+        
+        if user.is_anonymous:
+            raise GraphQLError('You need to login to delete a subscription!')
+        else: 
+            customer = stripe.Customer.retrieve(id=subscriptions.stripe_id)
+ 
+            print(customer.subscriptions.data[0].id)
+            sub_id = customer.subscriptions.data[0].id
+            stripe.Subscription.modify(
+                sub_id, #'sub_49ty4767H20z6a',
+                cancel_at_period_end=True,
+            )
+
+        return CancelSubscription(subscriptions=subscriptions)
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     update_user = UpdateUser.Field()
     create_subscription = CreateSubscription.Field()
+    cancel_subscription = CancelSubscription.Field()
