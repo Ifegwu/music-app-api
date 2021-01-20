@@ -17,18 +17,34 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from graphene_django.views import GraphQLView
+from django.contrib.auth import views as auth_views
 from django.views.decorators.csrf import csrf_exempt
 from graphql_jwt.decorators import jwt_cookie
-from app.registration.views import activate_account #, test_payment, save_stripe_info, confirm_payment_intent, delete_subscription 
+from app.registration.views import activate_account, reset_account #, test_payment, save_stripe_info, confirm_payment_intent, delete_subscription 
 from app.registration.thanks import thanks
 from app.registration.tryagain import tryagain
+from app.registration.password_reset_form import PasswordResetForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/activate/<token>', activate_account, name='activate'),
+    path('api/reset/<token>', reset_account, name='reset'),
     path('graphql/', csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=True)))),
+    path('api/password-reset', 
+            csrf_exempt(auth_views.PasswordResetView.as_view()), 
+            name="password_reset"),
+    path('api/password-reset/done', 
+            auth_views.PasswordResetDoneView.as_view(), 
+            name="password_reset_done"),
+    path('api/password-reset-confirm/<uidb64>/<token>', 
+            auth_views.PasswordResetConfirmView.as_view(), 
+            name="password_reset_confirm"),
+    path('api/password-reset-complete', 
+            auth_views.PasswordResetCompleteView.as_view(), 
+            name="password_reset_complete"),
     path('api/thanks/', thanks, name='thanks'),
     path('api/tryagain/', tryagain, name='oops!'),
+    path('api/password-reset-form/', PasswordResetForm, name='passwordReset'),
     # path('api/test-payment/', test_payment, name='testpayment'),
     # path('api/save-stripe-info/', save_stripe_info, name='stripeinfo'),
     # path('api/confirm-payment-intent/', confirm_payment_intent, name='paymentintent'),

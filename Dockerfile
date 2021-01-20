@@ -12,6 +12,7 @@ RUN pip install -r /requirements.txt
 RUN pip install django-six
 RUN pip install --upgrade stripe
 RUN pip install djangorestframework
+RUN pip install django-crispy-forms
 RUN apk del .tmp-build-deps
 
 

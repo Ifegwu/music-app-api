@@ -6,7 +6,7 @@ from graphql_jwt.decorators import login_required
 import graphql_jwt
 from graphql import GraphQLError
 from app.registration.models import User, Subscriptions
-from app.registration.send_email import send_confirmation
+from app.registration.send_email import send_confirmation, send_reset
 from django.conf import settings
 import stripe  
 
@@ -117,13 +117,15 @@ class UserInput(graphene.InputObjectType):
 
 class UpdateUser(graphene.Mutation):
     user = graphene.Field(UserType)
+    # message = graphene.String()
 
     class Arguments:
         user_data = UserInput(required=True)
-
+        
     # @login_required
     def mutate(self, info, user_data=None):
         user = info.context.user
+        # success_message = 'Updated succesfully'
 
         for k, v in user_data.items():
             if (k == 'password') and (v is not None):
@@ -138,6 +140,38 @@ class UpdateUser(graphene.Mutation):
 
         except Exception as e:
             return UpdateUser(user=user, errors=e)
+
+class PasswordRecovery(graphene.Mutation):
+    message = graphene.String()
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        email = graphene.String(required=True)
+        username = graphene.String(required=True)
+        # password = graphene.String(required=True)
+
+    def mutate(self, info, **kwargs):
+        # email=kwargs.get('email')
+        # username=kwargs.get('username')
+        # user = User(email=email, username=username)
+
+        user = User(
+            email=kwargs.get('email'),
+            username=kwargs.get('username')
+        )
+        
+        # user.set_password(kwargs.get('password'))
+        # user.save()
+        # print('User Saved!')
+        send_reset(
+            email=user.email,
+            username=user.username
+        )
+        print('Reset sent!')
+        return PasswordRecovery(
+                user=user,
+                message="Email successfully sent to, {}".format(user.username))
+
 
 class CreateSubscription(graphene.Mutation):
     subscriptions = graphene.Field(SubscriptionsType)
@@ -254,5 +288,7 @@ class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     login_user = LoginUser.Field()
     update_user = UpdateUser.Field()
+    password_recovery = PasswordRecovery.Field()
     create_subscription = CreateSubscription.Field()
     cancel_subscription = CancelSubscription.Field()
+

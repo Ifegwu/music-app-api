@@ -48,8 +48,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'tracks',
-    'app.registration'
+    'app.registration',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 GRAPHENE = {
     'SCHEMA': 'app.schema.schema',
@@ -146,7 +149,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # sendgrid settings
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'danielagbanyim@hotmail.com'
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 FRONTEND_DOMAIN = '127.0.0.1:4000'
 DOMAIN = os.getenv("DOMAIN")

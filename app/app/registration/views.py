@@ -41,6 +41,23 @@ def activate_account(request, token):
         msg_html = render_to_string('oops.html')
         return HttpResponse(msg_html)
 
+def reset_account(request, token):
+    username = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])["user"]
+    user = User.objects.get(username=username)
+    if username and not user.is_verified:
+        user.is_verified = True
+        # user.save()
+        # return redirect(f'{DOMAIN}/api')
+        # return thanks
+        msg_html = render_to_string('password_reset.html')
+        return HttpResponse(msg_html)
+    else:
+        user.is_verified = False
+        # messages.success(request, ('Items has been added to list'))
+        # return redirect(f'{DOMAIN}/api')
+        msg_html = render_to_string('oops.html')
+        return HttpResponse(msg_html)
+
 
 # def authenticate_header(request):
 #     keyword = 'JWT'
