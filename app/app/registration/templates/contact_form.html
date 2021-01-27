@@ -4,22 +4,23 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <title>Email Verification</title>
+   <title>Contact Form</title>
    <style>
 
        .card {
            font-family: "Helvetica Neue";
-           text-align: center;
+           font-size: 14px;
+           font-weight: 400;
+           text-align: start;
+           justify-content: center;
+           align-items: center;
            margin: auto;
-           width: 40%;
+           width: 100%;
        }
 
-       .btn {
-           padding: 7px;
-           margin-bottom: 10px;
-           background: #3b44c4;
-           color: #fff;
-           border-radius: 5px;
+       .card-body {
+           display: grid;
+           grid-template-rows: auto auto auto;
        }
 
    </style>
@@ -27,11 +28,9 @@
 <body>
     <div class="card">
         <div class="card-body">
+            <p class="text-center"><strong>Source</strong>: The email - {{ email }} is from {{name}}</p>
+            <h3>Content</h3>
             <p class="card-text text-center"><strong>{{ small_text_detail }}</strong></p>
-            <p class="text-center">{{ email }}</p>
-            <a class="text-center verify-button" href="{{domain}}{% url 'password_reset_confirm' uidb64=uid token=token %}">
-                <button type="button" class="btn">Reset Account</button>
-            </a>
         </div>
     </div>
 </body>

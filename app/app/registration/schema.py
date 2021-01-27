@@ -6,7 +6,7 @@ from graphql_jwt.decorators import login_required
 import graphql_jwt
 from graphql import GraphQLError
 from app.registration.models import User, Subscriptions
-from app.registration.send_email import send_confirmation, send_reset
+from app.registration.send_email import send_confirmation, contact_form
 from django.conf import settings
 import stripe  
 
@@ -278,11 +278,39 @@ class CancelSubscription(graphene.Mutation):
             print(customer.subscriptions.data[0].id)
             sub_id = customer.subscriptions.data[0].id
             stripe.Subscription.modify(
-                sub_id, #'sub_49ty4767H20z6a',
+                sub_id,
                 cancel_at_period_end=True,
             )
 
         return CancelSubscription(subscriptions=subscriptions)
+
+class ContactForm(graphene.Mutation):
+    message = graphene.String()
+    name = graphene.String()
+    email = graphene.String()
+    body = graphene.String()
+
+    class Arguments:
+        name = graphene.String(required=True)
+        email = graphene.String(required=True)
+        body = graphene.String(required=True)
+
+    def mutate(self, info, **kwargs):
+        email = kwargs.get('email')
+        name = kwargs.get('name')
+        body = kwargs.get('body')
+        
+        contact_form(
+            email=email,
+            name=name,
+            body=body
+        )
+        print('Confirmation sent!')
+        return ContactForm(
+            name=name, 
+            email=email, 
+            body=body, 
+            message="Message sent")
 
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
@@ -291,4 +319,5 @@ class Mutation(graphene.ObjectType):
     password_recovery = PasswordRecovery.Field()
     create_subscription = CreateSubscription.Field()
     cancel_subscription = CancelSubscription.Field()
+    contact_form = ContactForm.Field()
 
