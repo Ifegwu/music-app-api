@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from datetime import datetime
 from django.conf import settings
 
-
 class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(max_length=50, unique=True)

@@ -85,17 +85,13 @@ class LoginUser(graphene.Mutation):
         password = kwargs.get('password')
         user = authenticate(username=username, password=password)
         error_message = 'Invalid login credentials'
-        print(error_message)
         success_message = "You logged in successfully."
-        print(success_message)
         verification_error = 'Your email is not verified'
-        print(verification_error)
         if user:
             if user.is_verified:
                 payload = jwt_payload(user)
                 token = jwt_encode(payload)
                 refresh_token = graphql_jwt.Refresh.Field()
-                print(refresh_token)
                 return LoginUser(
                     token=token, 
                     message=success_message,
@@ -103,10 +99,7 @@ class LoginUser(graphene.Mutation):
                 )
 
             return LoginUser(message=verification_error)
-            print(LoginUser)
         return LoginUser(message=error_message)
-        print(LoginUser)
-
 
 class UserInput(graphene.InputObjectType):
     id = graphene.Int(required=False)
