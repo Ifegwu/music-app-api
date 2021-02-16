@@ -14,20 +14,21 @@ import os
 from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+print("base dir path", BASE_DIR)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 # DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 ALLOWED_HOSTS = [
-    'ec2-34-202-205-223.compute-1.amazonaws.com',
+    'ec2-3-250-176-35.eu-west-1.compute.amazonaws.com:8000',
     'temunah.online', 
     'localhost', 
     '127.0.0.1'
@@ -75,8 +76,8 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://temunah.online',
+    'http://temunah.netilify.com',
     'http://localhost:4000',
-    'http://localhost:8001',
     'http://localhost:8000',
 )
 
@@ -98,7 +99,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'app/app/templates')],
+        'DIRS': [BASE_DIR, 'templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,6 +110,15 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+TEMPLATE_DIRS = (
+    'music-api-app/app/app/templates',
+)
+
+TEMPLATE_LOADERS = [
+    'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.app_directories.load_template_source',
 ]
 
 WSGI_APPLICATION = 'app.wsgi.application'
@@ -188,19 +198,21 @@ USE_TZ = True
 # ANOTHER_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR , '/static')
-]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "app", "static"),)
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR , '/static'),
+# ]
+STATIC_ROOT = os.path.join(os.path.join(BASE_DIR, "development", "collected_static"),)
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SESSION_COOKIE_SECURE = True # new
+SESSION_COOKIE_SECURE = False # new
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = True # new
+CSRF_COOKIE_SECURE = False # new
 CSRF_COOKIE_HTTPONLY = True
