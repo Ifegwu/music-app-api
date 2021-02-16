@@ -24,15 +24,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 print("base dir path", BASE_DIR)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = bool(int(os.environ.get('DEBUG', 1)))
+# DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = [
-    'ec2-3-250-176-35.eu-west-1.compute.amazonaws.com:8000',
-    'temunah.online', 
-    'localhost', 
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = []
+ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
+if ALLOWED_HOSTS_ENV:
+    ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
 
 
 # Application definition
@@ -197,13 +195,18 @@ USE_TZ = True
 
 # ANOTHER_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-STATIC_URL = "/static/"
+STATIC_URL = "/static/static/"
+MEDIA_URL = "/static/media/"
+
+STATIC_ROOT = '/vol/web/static'
+MEDIA_ROOT = '/vol/web/media'
+
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "app", "static"),)
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, "app", "static"),)
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR , '/static'),
 # ]
-STATIC_ROOT = os.path.join(os.path.join(BASE_DIR, "development", "collected_static"),)
+# STATIC_ROOT = os.path.join(os.path.join(BASE_DIR, "development", "collected_static"),)
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'

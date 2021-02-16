@@ -1,0 +1,30 @@
+volumes: '3.7'
+
+services:
+  app:
+    build:
+      context: .
+    volumes: 
+      - static_data:/vol/web
+    env_file: .env.dev
+    # depends_on:
+    #   - db
+    # environment:
+    #   - DEBUG=1
+
+  proxy:
+    build: ./proxy
+    volumes: 
+      - static_data:/vol/static
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - app
+
+  # db:
+  #   image: postgres:10-alpine
+  #   env_file:
+  #     - .env.dev
+
+volumes: 
+  static_data:
