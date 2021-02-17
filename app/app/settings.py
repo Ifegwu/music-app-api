@@ -141,8 +141,10 @@ DATABASES = {
     }
 }
 
+# DATABASES['default'] = dj_database_url.config('postgres://temunadb',conn_max_age=600)
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
-DATABASES['default'] = dj_database_url.config('postgres://temunadb',conn_max_age=600)
 
 AUTH_USER_MODEL = 'registration.User'
 
@@ -168,7 +170,7 @@ AUTH_PASSWORD_VALIDATORS = [
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = 'danielagbanyim@hotmail.com'
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-FRONTEND_DOMAIN = '127.0.0.1:4000'
+FRONTEND_DOMAIN = 'temunah.online'
 DOMAIN = os.getenv("DOMAIN")
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -203,6 +205,7 @@ USE_TZ = True
 
 # ANOTHER_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = "/static/static/"
 MEDIA_URL = "/static/media/"
 
