@@ -33,5 +33,5 @@ six==1.12.0
 sqlparse==0.3.0
 gunicorn==19.9.0
 stripe>=2.48.0,<3.0
-uWSGI>=2.0.18,<2.1
+# uWSGI>=2.0.18,<2.1
 django-heroku>=0.1.0,<0.3.2

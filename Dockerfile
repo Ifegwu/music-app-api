@@ -34,6 +34,6 @@ RUN chmod -R 755 /vol/web
 USER user
 
 # VOLUME [ "static" ]
-CMD ["entrypoint.sh"]
+# CMD ["entrypoint.sh"]
 
-# CMD gunicorn music-app-api.app.app.wsgi -b 0.0.0.0:8000
+CMD gunicorn music-app-api.app.app.wsgi -b 0.0.0.0:8000
