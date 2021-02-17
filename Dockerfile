@@ -16,6 +16,7 @@ RUN pip install --upgrade stripe
 RUN pip install djangorestframework
 RUN pip install django-crispy-forms
 RUN pip install django-heroku
+RUN pip install dj-database-url
 RUN apk del .tmp
 
 
