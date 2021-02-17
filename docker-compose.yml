@@ -11,8 +11,7 @@ services:
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
-             python manage.py collectstatic --no-input &&
-             python manage.py runserver 0.0.0.0:8000"
+             gunicorn music-app-api.app.app.wsgi -b 0.0.0.0:8000"
     env_file: .env.dev
     depends_on:
       - db
