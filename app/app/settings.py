@@ -32,10 +32,11 @@ print("base dir path", BASE_DIR)
 # DEBUG = True
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = []
-ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
-if ALLOWED_HOSTS_ENV:
-    ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
+ALLOWED_HOSTS = [
+    'https://api-temunah-music.herokuapp.com'
+    'https://temunah.online',
+    'https://temunah.netilify.com',
+]
 
 
 # Application definition
@@ -78,10 +79,9 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    'http://temunah.online',
-    'http://temunah.netilify.com',
-    'http://localhost:4000',
-    'http://localhost:8000',
+    'https://temunah.online',
+    'https://temunah.netilify.com',
+    'https://api-temunah-music.herokuapp.com'
 )
 
 AUTHENTICATION_BACKENDS = [
@@ -168,7 +168,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # sendgrid settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'danielagbanyim@hotmail.com'
+DEFAULT_FROM_EMAIL = os.getenv('RECIPIANT_EMAIL')
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 FRONTEND_DOMAIN = 'temunah.online'
 DOMAIN = os.getenv("DOMAIN")
@@ -222,12 +222,12 @@ django_heroku.settings(locals())
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SESSION_COOKIE_SECURE = False # new
+SESSION_COOKIE_SECURE = True # new
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = False # new
+CSRF_COOKIE_SECURE = True # new
 CSRF_COOKIE_HTTPONLY = True
