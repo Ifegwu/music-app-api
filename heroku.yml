@@ -1,0 +1,9 @@
+build:
+  docker:
+    web: Dockerfile
+  run:
+    web: gunicorn music-app-api.app.app.wsgi -b 0.0.0.0:8000
+  release:
+    image: web
+    command:
+      - python manage.py migrate

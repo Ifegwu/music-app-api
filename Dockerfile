@@ -1,7 +1,7 @@
 FROM python:3.7-alpine
 LABEL  Temunah Global 
 
-ENV PATH="/scripts:${PATH}"
+# ENV PATH="/scripts:${PATH}"
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -24,17 +24,17 @@ RUN mkdir /app
 COPY ./app /app
 WORKDIR /app
 
-COPY ./scripts /scripts
-RUN chmod +x /scripts/*
-RUN mkdir -p /vol/web/media
-RUN mkdir -p /vol/web/
+# COPY ./scripts /scripts
+# RUN chmod +x /scripts/*
+# RUN mkdir -p /vol/web/media
+# RUN mkdir -p /vol/web/
 
-RUN adduser -D user
-RUN chown -R user:user /vol
-RUN chmod -R 755 /vol/web
-USER user
+# RUN adduser -D user
+# RUN chown -R user:user /vol
+# RUN chmod -R 755 /vol/web
+# USER user
 
-# VOLUME [ "static" ]
+VOLUME [ "static" ]
 # CMD ["entrypoint.sh"]
 
 CMD gunicorn music-app-api.app.app.wsgi -b 0.0.0.0:8000

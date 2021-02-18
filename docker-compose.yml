@@ -16,7 +16,7 @@ services:
     depends_on:
       - db
     environment:
-      - DEBUG=1
+      - DEBUG=0
 
   db:
     image: postgres:10-alpine
