@@ -2,7 +2,7 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: gunicorn app.wsgi -b 0.0.0.0:8000
+  web: gunicorn app.wsgi --preload
 release:
   image: web
   command:
