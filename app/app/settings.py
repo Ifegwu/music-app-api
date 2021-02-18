@@ -29,8 +29,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 print("base dir path", BASE_DIR)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+# DEBUG = False
+DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 ALLOWED_HOSTS = [
     'https://api-temunah-music.herokuapp.com'
