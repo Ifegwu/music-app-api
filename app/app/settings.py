@@ -29,13 +29,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 print("base dir path", BASE_DIR)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = False
+# DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = [
     'https://api-temunah-music.herokuapp.com'
-    'https://temunah.online',
-    'https://temunah.netilify.com',
+    'https://www.temunah.online',
+    'https://www.temunah.netilify.com',
 ]
 
 
@@ -79,8 +79,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    'https://temunah.online',
-    'https://temunah.netilify.com',
+    'https://www.temunah.online',
+    'https://www.temunah.netilify.com',
     'https://api-temunah-music.herokuapp.com'
 )
 
