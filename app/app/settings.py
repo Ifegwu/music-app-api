@@ -81,8 +81,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
     'https://www.temunah.online',
     'https://www.temunah.netilify.com',
-    'https://api-temunah-music.herokuapp.com'
-)
+    'https://api-temunah-music.herokuapp.com',
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
@@ -92,7 +91,7 @@ AUTHENTICATION_BACKENDS = [
 GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=20),
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=45),
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
 }
 
@@ -206,7 +205,7 @@ USE_TZ = True
 # ANOTHER_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_URL = "/static/static/"
+STATIC_URL = "/static/"
 
 # STATIC_ROOT = '/vol/web/static'
 # MEDIA_ROOT = '/vol/web/media'
@@ -227,7 +226,8 @@ SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SESSION_COOKIE_SECURE = True # new
+SESSION_COOKIE_SECURE = False # new
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = True # new
+CSRF_COOKIE_SECURE = False # new
 CSRF_COOKIE_HTTPONLY = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

@@ -5,7 +5,6 @@ from sendgrid.helpers.mail import *
 from django.template.loader import render_to_string
 import os
 from app.settings import DOMAIN, SENDGRID_API_KEY, SECRET_KEY
-# from app.settings import DOMAIN
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 from app.registration.models import User

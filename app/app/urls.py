@@ -19,7 +19,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from graphene_django.views import GraphQLView
 from django.contrib.auth import views as auth_views
 from django.views.decorators.csrf import csrf_exempt
-# from graphql_jwt.decorators import jwt_cookie
+from graphql_jwt.decorators import jwt_cookie
 from app.registration.views import activate_account, reset_account, password_reset, password_reset_confirm 
 from app.registration.thanks import thanks
 from app.registration.tryagain import tryagain
@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/activate/<token>', activate_account, name='activate'),
     path('api/reset/<token>', reset_account, name='reset'),
-    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('graphql/', csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=True)))),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('password-reset/', 
             auth_views.PasswordResetView.as_view(
