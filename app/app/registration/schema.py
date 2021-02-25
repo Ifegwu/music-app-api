@@ -215,8 +215,8 @@ class CreateSubscription(graphene.Mutation):
         customer_intent = stripe.PaymentIntent.create(
             customer=customer, 
             payment_method=payment_method_id,  
-            currency='ngn', # you can provide any currency you want
-            amount=500000,  # it equals 5000.00 NGN
+            currency='eur', # you can provide any currency you want
+            amount=11,  # it equivalent to 5000.00 NGN
             confirm=True
         ) 
 
@@ -226,7 +226,7 @@ class CreateSubscription(graphene.Mutation):
         stripe.Subscription.create(
             customer=customer,
             items=[
-                {'price': 'price_1I6EAkJF4Y1CLG7ZZPtxzRfK'}, #here paste your price id
+                {'price': 'price_1IOeQmJF4Y1CLG7ZhBaZiBmf'}, #here paste your price id
             ],
         ) 
         

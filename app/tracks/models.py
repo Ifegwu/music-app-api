@@ -11,7 +11,7 @@ class Track(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     url = models.URLField(validators=[URL_VALIDATOR])
-    avarta = models.URLField(blank=True, validators=[URL_VALIDATOR])
+    avarta = models.URLField(blank=True, default='DEFAULT VALUE', validators=[URL_VALIDATOR])
     created_at = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(
         # get_user_model(),

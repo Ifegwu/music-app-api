@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/activate/<token>', activate_account, name='activate'),
     path('api/reset/<token>', reset_account, name='reset'),
-    path('graphql/', csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=True)))),
+    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('password-reset/', 
             auth_views.PasswordResetView.as_view(

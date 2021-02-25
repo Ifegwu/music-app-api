@@ -33,7 +33,7 @@ print("base dir path", BASE_DIR)
 DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 ALLOWED_HOSTS = [
-    'https://api-temunah-music.herokuapp.com'
+    'https://api-temunah-music.herokuapp.com',
     'https://www.temunah.online',
     'https://www.temunah.netilify.com',
 ]
@@ -82,6 +82,7 @@ CORS_ORIGIN_WHITELIST = (
     'https://www.temunah.online',
     'https://www.temunah.netilify.com',
     'https://api-temunah-music.herokuapp.com',
+)
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
@@ -183,7 +184,7 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
 # Current Subscription Price
-SUBSCRIPTION_PRICE = 500000
+SUBSCRIPTION_PRICE = 11
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -230,4 +231,4 @@ SESSION_COOKIE_SECURE = True # new
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True # new
 CSRF_COOKIE_HTTPONLY = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
