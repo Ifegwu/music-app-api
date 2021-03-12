@@ -29,8 +29,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 print("base dir path", BASE_DIR)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = bool(int(os.environ.get('DEBUG', 1)))
+DEBUG = False
+# DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 ALLOWED_HOSTS = [
     # 'http://localhost:4000',
@@ -233,6 +233,6 @@ SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SESSION_COOKIE_SECURE = True # new
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = True # new
+CSRF_COOKIE_SECURE = False # new
 CSRF_COOKIE_HTTPONLY = True
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
