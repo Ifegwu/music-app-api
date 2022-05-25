@@ -23,7 +23,7 @@ graphql-relay==2.0.0
 pep8==1.7.1
 promise==2.2.1
 pycodestyle<2.5.0,>=2.4.0
-PyJWT==1.7.1
+PyJWT==2.4.0
 python-http-client==3.2.1
 pytz==2019.3
 Rx==1.6.1
