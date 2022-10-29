@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
     # 'http://localhost:8000',
     'https://api-temunah-music.herokuapp.com',
     'https://www.temunah.online',
-    'https://www.temunah.netilify.com',
+    'https://temunah.netlify.app',
 ]
 
 
