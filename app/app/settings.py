@@ -18,7 +18,6 @@ import django_heroku
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
@@ -81,8 +80,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    # 'http://localhost:4000',
-    # 'http://localhost:8000',
     'https://www.temunah.online',
     'https://www.temunah.netilify.com',
     'https://api-temunah-music.herokuapp.com',
